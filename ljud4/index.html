@@ -14,35 +14,36 @@
             align-items: center;
         }
         .grid {
-            display: flex;
-            flex-direction: column;
+            display: grid;
+            grid-template-columns: repeat(12, minmax(30px, 1fr));
+            gap: 2px;
             margin-bottom: 30px;
-            align-items: flex-start;
+            width: 100%;
+            max-width: 480px;
         }
-        .row {
-            display: flex;
-            align-items: center;
-            margin-bottom: 5px;
+        .cell {
+            width: 100%;
+            aspect-ratio: 1 / 1;
         }
         .cell input {
-            width: 30px;
-            height: 30px;
+            width: 100%;
+            height: 100%;
             text-align: center;
             font-size: 18px;
             border: 1px solid #333;
             background-color: white;
             border-radius: 0;
-            margin-right: 2px;
-            text-transform: capitalize;
+            text-transform: uppercase;
         }
         .highlight input {
             background-color: #ffe066;
         }
         .row-number {
-            width: 20px;
-            margin-right: 5px;
+            grid-column: span 1;
             text-align: right;
             font-weight: bold;
+            align-self: center;
+            padding-right: 4px;
         }
         .clue-list {
             margin-top: 20px;
@@ -50,20 +51,11 @@
         }
         h1 {
             color: #ffffff;
-            font-size: 50px;
+            font-size: 40px;
         }
         h2 {
             color: #ffffff;
             font-size: 30px;
-        }
-        li {
-            color: #ffffff;
-            font-size: 20px;
-        }
-        p {
-            color: #ffffff;
-            font-size: 20px;
-            margin-bottom: 50px;
         }
     </style>
 </head>
@@ -98,8 +90,9 @@
     </div>
 
     <script>
-        const targetColumnIndex = 4; // Den kolumn där alla highlight-celler ska hamna (0-baserad)
-        const cellWidth = 38; // inkl. marginal
+        const grid = document.getElementById("grid");
+        const allInputs = [];
+
         const rows = [
             { len: 6, clueIndex: 1 },
             { len: 8, clueIndex: 1 },
@@ -120,42 +113,45 @@
             { len: 5, clueIndex: 2 },
             { len: 5, clueIndex: 1 }
         ];
-        const gridContainer = document.getElementById('grid');
-        let allInputs = [];
 
         rows.forEach((row, rowIndex) => {
-            const rowDiv = document.createElement('div');
-            rowDiv.classList.add('row');
-            // Flytta hela raden så att highlight hamnar på targetColumnIndex
-            const shift = (targetColumnIndex - row.clueIndex) * cellWidth;
-            rowDiv.style.marginLeft = shift + 'px';
+            const startCol = 2 + (4 - row.clueIndex); // shift so highlight ends up in col 6 (approx center of grid)
 
+            // row number cell
             const rowNumber = document.createElement('div');
             rowNumber.classList.add('row-number');
-            rowNumber.innerText = (rowIndex + 1) + '.';
-            rowDiv.appendChild(rowNumber);
+            rowNumber.style.gridColumn = `1`;
+            rowNumber.style.gridRow = `${rowIndex + 1}`;
+            rowNumber.innerText = `${rowIndex + 1}.`;
+            grid.appendChild(rowNumber);
 
-            for (let j = 0; j < row.len; j++) {
-                const cell = document.createElement('div');
-                cell.classList.add('cell');
-                const input = document.createElement('input');
-                if (j === row.clueIndex) cell.classList.add('highlight');
+            for (let i = 0; i < row.len; i++) {
+                const col = startCol + i;
+                const cell = document.createElement("div");
+                cell.classList.add("cell");
+                if (i === row.clueIndex) {
+                    cell.classList.add("highlight");
+                }
+
+                cell.style.gridColumn = `${col}`;
+                cell.style.gridRow = `${rowIndex + 1}`;
+
+                const input = document.createElement("input");
                 cell.appendChild(input);
-                rowDiv.appendChild(cell);
+                grid.appendChild(cell);
                 allInputs.push(input);
             }
-
-            gridContainer.appendChild(rowDiv);
         });
 
         allInputs.forEach((input, index) => {
-            input.addEventListener('input', function () {
+            input.addEventListener("input", function () {
+                this.value = this.value.toUpperCase();
                 if (this.value.length === 1 && index < allInputs.length - 1) {
                     allInputs[index + 1].focus();
                 }
             });
-            input.addEventListener('keydown', function (e) {
-                if (e.key === 'Backspace' && this.value === '' && index > 0) {
+            input.addEventListener("keydown", function (e) {
+                if (e.key === "Backspace" && this.value === "" && index > 0) {
                     allInputs[index - 1].focus();
                 }
             });
