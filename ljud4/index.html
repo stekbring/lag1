@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Korsord – Ledtråd 4</title>
     <style>
@@ -30,14 +31,16 @@
             font-weight: bold;
         }
         .cell input {
-            width: 30px;
-            height: 30px;
+            width: 1.8vw;   /* 5% av viewportens bredd */
+            height: 1.8vw;
+            max-width: 30px;  /* max 30px */
+            max-height: 30px;
+            margin-right: 1vw;
             text-align: center;
             font-size: 18px;
             border: 1px solid #333;
             background-color: white;
             border-radius: 0;
-            margin-right: 5px;
             text-transform: uppercase;
         }
         .highlight input {
