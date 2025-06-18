@@ -24,12 +24,7 @@
             display: flex;
             align-items: center;
         }
-        .row-number {
-            margin-right: 5px;
-            width: 20px;
-            text-align: right;
-            font-weight: bold;
-        }
+        /* Ta bort den gamla row-number-stilen då numret hamnar i en cell */
         .cell input {
             width: 1.8em;
             height: 1.8em;
@@ -49,6 +44,13 @@
             height: 2.2em;
             margin-right: 0.4em;
             margin-bottom: 0em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            background-color: #343541;
+            color: white;
+            user-select: none;
         }
         .clue-list {
             margin-top: 20px;
@@ -80,29 +82,18 @@
             height: 0.5em;
             margin-right: 1.4em;
         }
-        .row-number {
-            margin-right: 2px;  /* Mindre mellanrum */
-            width: 18px;         /* Mindre bredd på siffran */
-            text-align: right;
-            font-weight: bold;
-            font-size: 0.9em;    /* Lite mindre storlek (valfritt) */
-        }
         h1 {
             font-size: 24px;
         }
-
         h2 {
             font-size: 18px;
         }
-
         p {
             font-size: 14px;
         }
-
         body {
             padding: 10px;
         }
-
         .clue-list {
             max-width: 100%;
         }
@@ -143,49 +134,58 @@
         const grid = document.getElementById("grid");
         const allInputs = [];
 
-        // Lägg till startPos som antal tomma celler innan rutorna
+        // Nu med numberOffset för att styra positionen för siffran i raden
         const rows = [
-            { len: 6, clueIndex: 1, startPos: 6 },
-            { len: 8, clueIndex: 1, startPos: 6 },
-            { len: 6, clueIndex: 2, startPos: 5 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 6, clueIndex: 4, startPos: 3 },
-            { len: 7, clueIndex: 5, startPos: 2 },
-            { len: 5, clueIndex: 2, startPos: 5 },
-            { len: 5, clueIndex: 3, startPos: 4 },
-            { len: 8, clueIndex: 6, startPos: 1 },
-            { len: 7, clueIndex: 4, startPos: 3 },
-            { len: 7, clueIndex: 2, startPos: 5 },
-            { len: 4, clueIndex: 1, startPos: 6 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 4, clueIndex: 2, startPos: 5 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 4, clueIndex: 1, startPos: 6 },
-            { len: 5, clueIndex: 2, startPos: 5 },
-            { len: 5, clueIndex: 1, startPos: 6 }
+            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 0 },
+            { len: 8, clueIndex: 1, startPos: 6, numberOffset: 2 },
+            { len: 6, clueIndex: 2, startPos: 5, numberOffset: 1 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 6, clueIndex: 4, startPos: 3, numberOffset: 0 },
+            { len: 7, clueIndex: 5, startPos: 2, numberOffset: 4 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 0 },
+            { len: 5, clueIndex: 3, startPos: 4, numberOffset: 1 },
+            { len: 8, clueIndex: 6, startPos: 1, numberOffset: 0 },
+            { len: 7, clueIndex: 4, startPos: 3, numberOffset: 2 },
+            { len: 7, clueIndex: 2, startPos: 5, numberOffset: 1 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 0 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 2 },
+            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 0 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 1 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 3 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 0 },
+            { len: 5, clueIndex: 1, startPos: 6, numberOffset: 2 }
         ];
 
         rows.forEach((row, rowIndex) => {
             const rowDiv = document.createElement("div");
             rowDiv.classList.add("row");
 
-            const rowNumber = document.createElement("div");
-            rowNumber.classList.add("row-number");
-            rowNumber.innerText = `${rowIndex + 1}.`;
-            rowDiv.appendChild(rowNumber);
-
-            // Lägg till tomma celler för indrag
-            for (let i = 0; i < row.startPos; i++) {
+            // Lägg till tomma celler före siffran
+            for(let i=0; i < row.numberOffset; i++) {
                 const emptyCell = document.createElement("div");
                 emptyCell.classList.add("cell");
                 rowDiv.appendChild(emptyCell);
             }
 
-            for (let i = 0; i < row.len; i++) {
+            // Skapa cell med siffra (placerad i ruta)
+            const numberCell = document.createElement("div");
+            numberCell.classList.add("cell");
+            numberCell.innerText = `${rowIndex + 1}.`;
+            rowDiv.appendChild(numberCell);
+
+            // Lägg till tomma celler mellan siffran och startPos (om det behövs)
+            for(let i = row.numberOffset + 1; i < row.startPos; i++) {
+                const emptyCell = document.createElement("div");
+                emptyCell.classList.add("cell");
+                rowDiv.appendChild(emptyCell);
+            }
+
+            // Lägg till bokstavsrutorna
+            for(let i=0; i < row.len; i++) {
                 const cell = document.createElement("div");
                 const input = document.createElement("input");
                 cell.classList.add("cell");
-                if (i === row.clueIndex) {
+                if(i === row.clueIndex) {
                     cell.classList.add("highlight");
                 }
                 cell.appendChild(input);
