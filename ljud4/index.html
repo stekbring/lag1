@@ -52,6 +52,10 @@
             color: white;
             user-select: none;
         }
+        /* Klass för numrerceller */
+        .number-cell {
+            font-size: 1.1em;
+        }
         .clue-list {
             margin-top: 20px;
             max-width: 600px;
@@ -71,34 +75,38 @@
         }
 
         @media (max-width: 600px) {
-        .cell input, .cell {
-            width: 100%;
-            height: 100%;
-            font-size: 1.2em;
-            margin: 0 ;
+            .cell input, .cell {
+                width: 100%;
+                height: 100%;
+                font-size: 1.2em;
+                margin: 0 ;
+            }
+            .cell {
+                width: 0.04em;
+                height: 0.5em;
+                margin-right: 1.25em;
+                margin-bottom: 0.4em;
+            }
+            /* Minska fontstorlek på numrerceller i mobil */
+            .number-cell {
+                font-size: 0.7em;
+            }
+            h1 {
+                font-size: 24px;
+            }
+            h2 {
+                font-size: 18px;
+            }
+            p {
+                font-size: 14px;
+            }
+            body {
+                padding: 10px;
+            }
+            .clue-list {
+                max-width: 100%;
+            }
         }
-        .cell {
-            width: 0.04em;
-            height: 0.5em;
-            margin-right: 1.25em;
-            margin-bottom: 0.4em;
-        }
-        h1 {
-            font-size: 24px;
-        }
-        h2 {
-            font-size: 18px;
-        }
-        p {
-            font-size: 14px;
-        }
-        body {
-            padding: 10px;
-        }
-        .clue-list {
-            max-width: 100%;
-        }
-      }
     </style>
 </head>
 <body>
@@ -170,7 +178,7 @@
 
             // Skapa cell med siffra (placerad i ruta)
             const numberCell = document.createElement("div");
-            numberCell.classList.add("cell");
+            numberCell.classList.add("cell", "number-cell");  // <-- Här lägger vi till klass
             numberCell.innerText = `${rowIndex + 1}.`;
             rowDiv.appendChild(numberCell);
 
