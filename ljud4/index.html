@@ -23,8 +23,6 @@
             display: flex;
             align-items: center;
             margin-bottom: 5px;
-            position: relative;
-            left: 0;
         }
         .cell input {
             width: 30px;
@@ -35,7 +33,7 @@
             background-color: white;
             border-radius: 0;
             margin-right: 2px;
-            text-transform: uppercase;
+            text-transform: capitalize;
         }
         .highlight input {
             background-color: #ffe066;
@@ -45,7 +43,6 @@
             margin-right: 5px;
             text-align: right;
             font-weight: bold;
-            flex-shrink: 0;
         }
         .clue-list {
             margin-top: 20px;
@@ -92,7 +89,8 @@
     </div>
 
     <script>
-        const targetColumnIndex = 4;
+        const targetColumnIndex = 4; // Den kolumn där alla highlight-celler ska hamna (0-baserad)
+        const cellWidth = 38; // inkl. marginal
         const rows = [
             { len: 6, clueIndex: 1 },
             { len: 8, clueIndex: 1 },
@@ -113,18 +111,15 @@
             { len: 5, clueIndex: 2 },
             { len: 5, clueIndex: 1 }
         ];
-
         const gridContainer = document.getElementById('grid');
         let allInputs = [];
-
-        const getRowShift = (clueIndex, rowLen) => {
-            return (targetColumnIndex - clueIndex) * (30 + 2); // 30 width + 2 margin
-        };
 
         rows.forEach((row, rowIndex) => {
             const rowDiv = document.createElement('div');
             rowDiv.classList.add('row');
-            rowDiv.style.left = getRowShift(row.clueIndex, row.len) + 'px';
+            // Flytta hela raden så att highlight hamnar på targetColumnIndex
+            const shift = (targetColumnIndex - row.clueIndex) * cellWidth;
+            rowDiv.style.marginLeft = shift + 'px';
 
             const rowNumber = document.createElement('div');
             rowNumber.classList.add('row-number');
@@ -146,7 +141,6 @@
 
         allInputs.forEach((input, index) => {
             input.addEventListener('input', function () {
-                this.value = this.value.toUpperCase();
                 if (this.value.length === 1 && index < allInputs.length - 1) {
                     allInputs[index + 1].focus();
                 }
