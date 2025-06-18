@@ -1,110 +1,149 @@
 <!DOCTYPE html>
 <html lang="sv">
 <head>
-  <meta charset="UTF-8" />
-  <title>Ledtråd 4</title>
-  <style>
-  body {
-    font-family: sans-serif;
-    background-color: #343541;
-    color: white;
-    text-align: center;
-    padding: 100px; /* minska padding från 300 */
-  }
-  h1 {
-    font-size: 60px; /* gör rubriken större */
-    margin-bottom: 40px;
-  }
-  audio {
-    width: 100%;
-    max-width: 500px;
-    margin-bottom: 30px;
-  }
-  button {
-    background-color: #555656;
-    color: white;
-    border: none;
-    padding: 15px 30px;  /* större knapp */
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 30px;     /* större text på knappen */
-    margin-bottom: 30px;
-  }
-  input[type="range"] {
-    width: 500px;
-    max-width: 90vw;
-    height: 15px;        /* tjockare slider */
-    background: #555656;
-    border-radius: 8px;
-    outline: none;
-  }
-  input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 30px;
-  height: 30px;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #343541;
-  margin-top: -1px; /* exakt centrerad vertikalt */
-}
-input[type="range"]::-moz-range-thumb {
-  width: 30px;
-  height: 30px;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 50%;
-  border: 2px solid #343541;
-  margin-top: -7.5px; /* exakt centrerad vertikalt */
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <title>Korsord – Ledtråd 4</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #343541;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .grid {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+        .row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .cell input {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid #333;
+            background-color: white;
+            margin-right: 2px;
+        }
+        .highlight input {
+            background-color: #ffe066;
+        }
+        .row-number {
+            width: 20px;
+            margin-right: 5px;
+            text-align: right;
+            font-weight: bold;
+        }
+        .clue-list {
+            margin-top: 20px;
+            max-width: 600px;
+        }
+        h1, h2 {
+            color: #ffffff;
+        }
+    </style>
 </head>
 <body>
+    <h1>Ledtråd 4  -  Korsord</h1>
+    <p>Fyll i rutorna. Gulmarkerade rutor bildar ett dolt ord.</p>
 
-  <h1>Ledtråd 4</h1>
+    <div class="grid" id="grid"></div>
 
-  <audio id="audio" src="ljudtest.mp3"></audio>
+    <div class="clue-list">
+        <h2>Ledtrådar</h2>
+        <ol>
+            <li>Man snurrar och kastar något med kraft</li>
+            <li>Det man tar när man är ledig från jobbet</li>
+            <li>Aktiv fysisk aktivitet</li>
+            <li>Det man gör på tåget när det är försenat</li>
+            <li>Det man gör med munnen i samtal</li>
+            <li>Det man köper till gymmet för lång tid</li>
+            <li>Den övre delen av kroppen</li>
+            <li>Det bastun är full av</li>
+            <li>Röken tar vägen ut här</li>
+            <li>Man gör detta på dansgolvet</li>
+            <li>Sätts under skidor för fäste</li>
+            <li>Svensk tradition med kaffe och kanske bulle</li>
+            <li>Benen pekar åt olika håll</li>
+            <li>En vanlig svensk julväxt</li>
+            <li>Där man kan ligga i varmt vatten</li>
+            <li>Det som finns kvar efter middagen</li>
+            <li>Något du gör på samma sätt varje dag</li>
+            <li>Ett medicinskt instrument man för in i kroppen</li>
+        </ol>
+    </div>
 
-  <button id="playPauseBtn">Play</button><br/>
+    <script>
+        const targetColumnIndex = 4; // Den kolumn där alla highlight-celler ska hamna (0-baserad)
+        const cellWidth = 38; // inkl. marginal
+        const rows = [
+            { len: 6, clueIndex: 1 },
+            { len: 8, clueIndex: 1 },
+            { len: 6, clueIndex: 2 },
+            { len: 6, clueIndex: 3 },
+            { len: 6, clueIndex: 4 },
+            { len: 7, clueIndex: 5 },
+            { len: 5, clueIndex: 2 },
+            { len: 5, clueIndex: 3 },
+            { len: 8, clueIndex: 6 },
+            { len: 7, clueIndex: 4 },
+            { len: 7, clueIndex: 2 },
+            { len: 4, clueIndex: 1 },
+            { len: 6, clueIndex: 3 },
+            { len: 4, clueIndex: 2 },
+            { len: 6, clueIndex: 3 },
+            { len: 4, clueIndex: 1 },
+            { len: 5, clueIndex: 2 },
+            { len: 5, clueIndex: 1 }
+        ];
+        const gridContainer = document.getElementById('grid');
+        let allInputs = [];
 
-  <input type="range" id="progress" min="0" max="100" value="0" step="0.1" />
+        rows.forEach((row, rowIndex) => {
+            const rowDiv = document.createElement('div');
+            rowDiv.classList.add('row');
+            // Flytta hela raden så att highlight hamnar på targetColumnIndex
+            const shift = (targetColumnIndex - row.clueIndex) * cellWidth;
+            rowDiv.style.marginLeft = shift + 'px';
 
-  <script>
-    const audio = document.getElementById('audio');
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const progress = document.getElementById('progress');
+            const rowNumber = document.createElement('div');
+            rowNumber.classList.add('row-number');
+            rowNumber.innerText = (rowIndex + 1) + '.';
+            rowDiv.appendChild(rowNumber);
 
-    // Spela/pausa
-    playPauseBtn.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.play();
-        playPauseBtn.textContent = 'Pause';
-      } else {
-        audio.pause();
-        playPauseBtn.textContent = 'Play';
-      }
-    });
+            for (let j = 0; j < row.len; j++) {
+                const cell = document.createElement('div');
+                cell.classList.add('cell');
+                const input = document.createElement('input');
+                if (j === row.clueIndex) cell.classList.add('highlight');
+                cell.appendChild(input);
+                rowDiv.appendChild(cell);
+                allInputs.push(input);
+            }
 
-    // Uppdatera slider medan ljudet spelas
-    audio.addEventListener('timeupdate', () => {
-      const value = (audio.currentTime / audio.duration) * 100;
-      progress.value = value || 0;
-    });
+            gridContainer.appendChild(rowDiv);
+        });
 
-    // Spola ljudet när man drar slider
-    progress.addEventListener('input', () => {
-      audio.currentTime = (progress.value / 100) * audio.duration;
-    });
-
-    // När ljudet tar slut, återställ knapptext
-    audio.addEventListener('ended', () => {
-      playPauseBtn.textContent = 'Play';
-      progress.value = 0;
-    });
-  </script>
-
+        allInputs.forEach((input, index) => {
+            input.addEventListener('input', function () {
+                if (this.value.length === 1 && index < allInputs.length - 1) {
+                    allInputs[index + 1].focus();
+                }
+            });
+            input.addEventListener('keydown', function (e) {
+                if (e.key === 'Backspace' && this.value === '' && index > 0) {
+                    allInputs[index - 1].focus();
+                }
+            });
+        });
+    </script>
 </body>
 </html>
