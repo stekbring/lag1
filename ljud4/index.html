@@ -14,36 +14,39 @@
             align-items: center;
         }
         .grid {
-            display: grid;
-            grid-template-columns: repeat(12, minmax(30px, 1fr));
-            gap: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
             margin-bottom: 30px;
-            width: 100%;
-            max-width: 480px;
         }
-        .cell {
-            width: 100%;
-            aspect-ratio: 1 / 1;
+        .row {
+            display: flex;
+            align-items: center;
+        }
+        .row-number {
+            margin-right: 5px;
+            width: 20px;
+            text-align: right;
+            font-weight: bold;
         }
         .cell input {
-            width: 100%;
-            height: 100%;
+            width: 30px;
+            height: 30px;
             text-align: center;
             font-size: 18px;
             border: 1px solid #333;
             background-color: white;
             border-radius: 0;
+            margin-right: 5px;
             text-transform: uppercase;
         }
         .highlight input {
             background-color: #ffe066;
         }
-        .row-number {
-            grid-column: span 1;
-            text-align: right;
-            font-weight: bold;
-            align-self: center;
-            padding-right: 4px;
+        .cell {
+            width: 30px;
+            height: 30px;
+            margin-right: 8px;
         }
         .clue-list {
             margin-top: 20px;
@@ -56,6 +59,11 @@
         h2 {
             color: #ffffff;
             font-size: 30px;
+        }
+        p {
+            color: #ffffff;
+            font-size: 20px;
+            margin-bottom: 50px;
         }
     </style>
 </head>
@@ -93,54 +101,57 @@
         const grid = document.getElementById("grid");
         const allInputs = [];
 
+        // Lägg till startPos som antal tomma celler innan rutorna
         const rows = [
-            { len: 6, clueIndex: 1 },
-            { len: 8, clueIndex: 1 },
-            { len: 6, clueIndex: 2 },
-            { len: 6, clueIndex: 3 },
-            { len: 6, clueIndex: 4 },
-            { len: 7, clueIndex: 5 },
-            { len: 5, clueIndex: 2 },
-            { len: 5, clueIndex: 3 },
-            { len: 8, clueIndex: 6 },
-            { len: 7, clueIndex: 4 },
-            { len: 7, clueIndex: 2 },
-            { len: 4, clueIndex: 1 },
-            { len: 6, clueIndex: 3 },
-            { len: 4, clueIndex: 2 },
-            { len: 6, clueIndex: 3 },
-            { len: 4, clueIndex: 1 },
-            { len: 5, clueIndex: 2 },
-            { len: 5, clueIndex: 1 }
+            { len: 6, clueIndex: 1, startPos: 6 },
+            { len: 8, clueIndex: 1, startPos: 6 },
+            { len: 6, clueIndex: 2, startPos: 5 },
+            { len: 6, clueIndex: 3, startPos: 4 },
+            { len: 6, clueIndex: 4, startPos: 3 },
+            { len: 7, clueIndex: 5, startPos: 2 },
+            { len: 5, clueIndex: 2, startPos: 5 },
+            { len: 5, clueIndex: 3, startPos: 4 },
+            { len: 8, clueIndex: 6, startPos: 1 },
+            { len: 7, clueIndex: 4, startPos: 3 },
+            { len: 7, clueIndex: 2, startPos: 5 },
+            { len: 4, clueIndex: 1, startPos: 6 },
+            { len: 6, clueIndex: 3, startPos: 4 },
+            { len: 4, clueIndex: 2, startPos: 5 },
+            { len: 6, clueIndex: 3, startPos: 4 },
+            { len: 4, clueIndex: 1, startPos: 6 },
+            { len: 5, clueIndex: 2, startPos: 5 },
+            { len: 5, clueIndex: 1, startPos: 6 }
         ];
 
         rows.forEach((row, rowIndex) => {
-            const startCol = 2 + (4 - row.clueIndex); // shift so highlight ends up in col 6 (approx center of grid)
+            const rowDiv = document.createElement("div");
+            rowDiv.classList.add("row");
 
-            // row number cell
-            const rowNumber = document.createElement('div');
-            rowNumber.classList.add('row-number');
-            rowNumber.style.gridColumn = `1`;
-            rowNumber.style.gridRow = `${rowIndex + 1}`;
+            const rowNumber = document.createElement("div");
+            rowNumber.classList.add("row-number");
             rowNumber.innerText = `${rowIndex + 1}.`;
-            grid.appendChild(rowNumber);
+            rowDiv.appendChild(rowNumber);
+
+            // Lägg till tomma celler för indrag
+            for (let i = 0; i < row.startPos; i++) {
+                const emptyCell = document.createElement("div");
+                emptyCell.classList.add("cell");
+                rowDiv.appendChild(emptyCell);
+            }
 
             for (let i = 0; i < row.len; i++) {
-                const col = startCol + i;
                 const cell = document.createElement("div");
+                const input = document.createElement("input");
                 cell.classList.add("cell");
                 if (i === row.clueIndex) {
                     cell.classList.add("highlight");
                 }
-
-                cell.style.gridColumn = `${col}`;
-                cell.style.gridRow = `${rowIndex + 1}`;
-
-                const input = document.createElement("input");
                 cell.appendChild(input);
-                grid.appendChild(cell);
+                rowDiv.appendChild(cell);
                 allInputs.push(input);
             }
+
+            grid.appendChild(rowDiv);
         });
 
         allInputs.forEach((input, index) => {
