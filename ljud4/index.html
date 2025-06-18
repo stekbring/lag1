@@ -80,6 +80,13 @@
             height: 0.5em;
             margin-right: 1.4em;
         }
+        .row-number {
+            margin-right: 2px;  /* Mindre mellanrum */
+            width: 18px;         /* Mindre bredd på siffran */
+            text-align: right;
+            font-weight: bold;
+            font-size: 0.9em;    /* Lite mindre storlek (valfritt) */
+        }
         h1 {
             font-size: 24px;
         }
@@ -162,17 +169,10 @@
             const rowDiv = document.createElement("div");
             rowDiv.classList.add("row");
 
-            const numberCell = document.createElement("div");
-                numberCell.classList.add("cell");
-                numberCell.style.display = "flex";
-                numberCell.style.alignItems = "center";
-                numberCell.style.justifyContent = "center";
-                numberCell.style.backgroundColor = "#343541";
-                numberCell.style.color = "white";
-                numberCell.style.fontWeight = "bold";
-                numberCell.innerText = `${rowIndex + 1}.`;
-                rowDiv.appendChild(numberCell);
-
+            const rowNumber = document.createElement("div");
+            rowNumber.classList.add("row-number");
+            rowNumber.innerText = `${rowIndex + 1}.`;
+            rowDiv.appendChild(rowNumber);
 
             // Lägg till tomma celler för indrag
             for (let i = 0; i < row.startPos; i++) {
