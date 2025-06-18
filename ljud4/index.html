@@ -81,6 +81,7 @@
             width: 0.04em;
             height: 0.5em;
             margin-right: 1.4em;
+            margin-bottom: 1.4em;
         }
         h1 {
             font-size: 24px;
@@ -136,24 +137,24 @@
 
         // Nu med numberOffset för att styra positionen för siffran i raden
         const rows = [
-            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 0 },
-            { len: 8, clueIndex: 1, startPos: 6, numberOffset: 2 },
-            { len: 6, clueIndex: 2, startPos: 5, numberOffset: 1 },
+            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 8, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 6, clueIndex: 2, startPos: 5, numberOffset: 4 },
             { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
-            { len: 6, clueIndex: 4, startPos: 3, numberOffset: 0 },
-            { len: 7, clueIndex: 5, startPos: 2, numberOffset: 4 },
-            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 0 },
-            { len: 5, clueIndex: 3, startPos: 4, numberOffset: 1 },
+            { len: 6, clueIndex: 4, startPos: 3, numberOffset: 2 },
+            { len: 7, clueIndex: 5, startPos: 2, numberOffset: 1 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 5, clueIndex: 3, startPos: 4, numberOffset: 3 },
             { len: 8, clueIndex: 6, startPos: 1, numberOffset: 0 },
             { len: 7, clueIndex: 4, startPos: 3, numberOffset: 2 },
-            { len: 7, clueIndex: 2, startPos: 5, numberOffset: 1 },
-            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 0 },
-            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 2 },
-            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 0 },
-            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 1 },
-            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 3 },
-            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 0 },
-            { len: 5, clueIndex: 1, startPos: 6, numberOffset: 2 }
+            { len: 7, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 5, clueIndex: 1, startPos: 6, numberOffset: 5 }
         ];
 
         rows.forEach((row, rowIndex) => {
