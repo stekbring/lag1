@@ -136,44 +136,59 @@
         const grid = document.getElementById("grid");
         const allInputs = [];
 
-        // Lägg till startPos som antal tomma celler innan rutorna
+        // Lägg till startPos som antal tomma celler innan rutorna och numberOffset som position för siffran i raden
         const rows = [
-            { len: 6, clueIndex: 1, startPos: 6 },
-            { len: 8, clueIndex: 1, startPos: 6 },
-            { len: 6, clueIndex: 2, startPos: 5 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 6, clueIndex: 4, startPos: 3 },
-            { len: 7, clueIndex: 5, startPos: 2 },
-            { len: 5, clueIndex: 2, startPos: 5 },
-            { len: 5, clueIndex: 3, startPos: 4 },
-            { len: 8, clueIndex: 6, startPos: 1 },
-            { len: 7, clueIndex: 4, startPos: 3 },
-            { len: 7, clueIndex: 2, startPos: 5 },
-            { len: 4, clueIndex: 1, startPos: 6 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 4, clueIndex: 2, startPos: 5 },
-            { len: 6, clueIndex: 3, startPos: 4 },
-            { len: 4, clueIndex: 1, startPos: 6 },
-            { len: 5, clueIndex: 2, startPos: 5 },
-            { len: 5, clueIndex: 1, startPos: 6 }
+            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 8, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 6, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 6, clueIndex: 4, startPos: 3, numberOffset: 2 },
+            { len: 7, clueIndex: 5, startPos: 2, numberOffset: 1 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 5, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 8, clueIndex: 6, startPos: 1, numberOffset: 0 },
+            { len: 7, clueIndex: 4, startPos: 3, numberOffset: 2 },
+            { len: 7, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 5, clueIndex: 1, startPos: 6, numberOffset: 5 }
         ];
 
         rows.forEach((row, rowIndex) => {
             const rowDiv = document.createElement("div");
             rowDiv.classList.add("row");
 
-            const rowNumber = document.createElement("div");
-            rowNumber.classList.add("row-number");
-            rowNumber.innerText = `${rowIndex + 1}.`;
-            rowDiv.appendChild(rowNumber);
-
-            // Lägg till tomma celler för indrag
-            for (let i = 0; i < row.startPos; i++) {
+            // Lägg till tomma celler innan siffran
+            for (let i = 0; i < row.numberOffset; i++) {
                 const emptyCell = document.createElement("div");
                 emptyCell.classList.add("cell");
                 rowDiv.appendChild(emptyCell);
             }
 
+            // Skapa cell med siffra
+            const numberCell = document.createElement("div");
+            numberCell.classList.add("cell");
+            numberCell.style.display = "flex";
+            numberCell.style.alignItems = "center";
+            numberCell.style.justifyContent = "center";
+            numberCell.style.backgroundColor = "#343541";
+            numberCell.style.color = "white";
+            numberCell.style.fontWeight = "bold";
+            numberCell.innerText = `${rowIndex + 1}.`;
+            rowDiv.appendChild(numberCell);
+
+            // Lägg till tomma celler mellan siffran och början på rutorna
+            for (let i = row.numberOffset + 1; i < row.startPos; i++) {
+                const emptyCell = document.createElement("div");
+                emptyCell.classList.add("cell");
+                rowDiv.appendChild(emptyCell);
+            }
+
+            // Lägg till själva rutorna
             for (let i = 0; i < row.len; i++) {
                 const cell = document.createElement("div");
                 const input = document.createElement("input");
@@ -202,6 +217,7 @@
                 }
             });
         });
+
     </script>
 </body>
 </html>
