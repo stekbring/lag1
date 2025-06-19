@@ -129,20 +129,20 @@
     <div class="clue-list">
         <h2>Ledtrådar</h2>
         <ol>
-            <li>Man snurrar och kastar något med kraft</li>
+            <li>Vem är bäst på skattjakter?</li>
             <li>Det man tar när man är ledig från jobbet</li>
             <li>Aktiv fysisk aktivitet</li>
             <li>Det man gör på tåget när det är försenat</li>
-            <li>Det man gör med munnen i samtal</li>
+            <li>Vad heter den ökände gäddan som kanal dyr sprängde?</li>
             <li>Det man köper till gymmet för lång tid</li>
             <li>Den övre delen av kroppen</li>
-            <li>Det bastun är full av</li>
+            <li>Vem avnjuter en golden shower hemma hos Mira?</li>
             <li>Röken tar vägen ut här</li>
             <li>Man gör detta på dansgolvet</li>
             <li>Sätts under skidor för fäste</li>
             <li>Svensk tradition med kaffe och kanske bulle</li>
             <li>Benen pekar åt olika håll</li>
-            <li>En vanlig svensk julväxt</li>
+            <li>Vad heter kanalen som tillhör tre av de bästa fiskarna i sverige?</li>
             <li>Där man kan ligga i varmt vatten</li>
             <li>Det som finns kvar efter middagen</li>
             <li>Något du gör på samma sätt varje dag</li>
@@ -156,20 +156,20 @@
 
         // Nu med numberOffset för att styra positionen för siffran i raden
         const rows = [
-            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 5 },
+            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 4 },
             { len: 8, clueIndex: 1, startPos: 6, numberOffset: 5 },
             { len: 6, clueIndex: 2, startPos: 5, numberOffset: 4 },
             { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
-            { len: 6, clueIndex: 4, startPos: 3, numberOffset: 2 },
+            { len: 6, clueIndex: 2, startPos: 5, numberOffset: 4 },
             { len: 7, clueIndex: 5, startPos: 2, numberOffset: 1 },
             { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
-            { len: 5, clueIndex: 3, startPos: 4, numberOffset: 3 },
+            { len: 6, clueIndex: 1, startPos: 6, numberOffset: 5 },
             { len: 8, clueIndex: 6, startPos: 1, numberOffset: 0 },
             { len: 7, clueIndex: 4, startPos: 3, numberOffset: 2 },
             { len: 7, clueIndex: 2, startPos: 5, numberOffset: 4 },
             { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
             { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
-            { len: 4, clueIndex: 2, startPos: 5, numberOffset: 4 },
+            { len: 8, clueIndex: 1, startPos: 6, numberOffset: 5 },
             { len: 6, clueIndex: 3, startPos: 4, numberOffset: 3 },
             { len: 4, clueIndex: 1, startPos: 6, numberOffset: 5 },
             { len: 5, clueIndex: 2, startPos: 5, numberOffset: 4 },
@@ -229,6 +229,31 @@
                 }
             });
         });
+    // Funktion för att spara alla inputs i localStorage
+        function saveInputs() {
+            allInputs.forEach((input, i) => {
+                localStorage.setItem('input_' + i, input.value);
+            });
+        }
+
+        // Funktion för att ladda alla inputs från localStorage
+        function loadInputs() {
+            allInputs.forEach((input, i) => {
+                const savedValue = localStorage.getItem('input_' + i);
+                if (savedValue) {
+                    input.value = savedValue;
+                }
+            });
+        }
+
+        // Anropa loadInputs när sidan laddas
+        window.addEventListener('load', loadInputs);
+
+        // Spara input-värde vid varje förändring
+        allInputs.forEach((input) => {
+            input.addEventListener('input', saveInputs);
+        });
+
     </script>
 </body>
 </html>
